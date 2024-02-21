@@ -18,7 +18,6 @@ const ViewOrder: FunctionComponent = () => {
   return (
     <div className="relative bg-white w-full h-[1024px] flex flex-col items-start justify-start">
       <main className="self-stretch flex-1 flex flex-col items-center justify-start py-[43px] px-5 gap-[10px] text-left text-base text-gray-300 font-aleo sm:flex-col">
-
         <header className="self-stretch flex flex-row items-start justify-start gap-[36px] text-left text-13xl text-gray-100 font-aleo">
           <img
             className="relative w-[37px] h-[37px] overflow-hidden shrink-0 object-cover cursor-pointer"

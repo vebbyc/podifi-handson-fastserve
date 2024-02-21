@@ -6,7 +6,10 @@ import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import "./global.css";
+import { NotificationProvider } from "./contexts/NotificationContext";
 
 const chakraTheme = extendTheme({
   styles: { global: { img: { maxWidth: "unset" } } },
@@ -21,12 +24,17 @@ const root = createRoot(container!);
 
 root.render(
   <BrowserRouter>
-    <CacheProvider value={emotionCache}>
-      <ChakraProvider theme={chakraTheme}>
-        <App />
-      </ChakraProvider>
-    </CacheProvider>
-  </BrowserRouter>,
+    <NotificationProvider>
+      <CacheProvider value={emotionCache}>
+        <ChakraProvider theme={chakraTheme}>
+          <QueryClientProvider client={new QueryClient()}>
+            <App />
+            <ReactQueryDevtools initialIsOpen={true} />
+          </QueryClientProvider>
+        </ChakraProvider>
+      </CacheProvider>
+    </NotificationProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

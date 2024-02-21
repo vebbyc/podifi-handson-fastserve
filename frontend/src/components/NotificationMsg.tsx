@@ -1,4 +1,10 @@
-import { FunctionComponent, useMemo, type CSSProperties } from "react";
+// frontend/src/components/NotificationMsg.tsx
+import {
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  type CSSProperties,
+} from "react";
 
 type NotificationMsgType = {
   notificationIconFrame?: string;
@@ -16,6 +22,7 @@ const NotificationMsg: FunctionComponent<NotificationMsgType> = ({
   notificationMainMessageFrFlex,
   notificationMainMessage,
   notificationSecondaryMessFlex,
+  // onDismiss,
 }) => {
   const notificationStyle: CSSProperties = useMemo(() => {
     return {
@@ -34,6 +41,18 @@ const NotificationMsg: FunctionComponent<NotificationMsgType> = ({
       flex: notificationSecondaryMessFlex,
     };
   }, [notificationSecondaryMessFlex]);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (onDismiss) {
+  //       onDismiss();
+  //     }
+  //   }, 2500);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [onDismiss]);
 
   return (
     <section

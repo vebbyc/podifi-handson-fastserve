@@ -1,13 +1,27 @@
 import { FunctionComponent, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ItemDetailsCard from "../components/ItemDetailsCard";
 
+import * as apiClient from "../api-client";
+import { useQuery } from "react-query";
+
 const ItemDetail: FunctionComponent = () => {
+  const { itemId } = useParams();
   const navigate = useNavigate();
 
   const onBackButtonFrameIconClick = useCallback(() => {
     navigate("/homepage");
   }, [navigate]);
+
+  if (!itemId) {
+    return <div>Invalid item ID</div>;
+  }
+
+  const { data: menuItem } = useQuery(
+    "fetchMenuItems",
+    () => apiClient.getItemDetail(itemId),
+    { enabled: !!itemId }
+  );
 
   return (
     <div className="relative bg-white w-full h-[1024px] overflow-hidden flex flex-col items-start justify-start sm:flex-col">
@@ -30,11 +44,12 @@ const ItemDetail: FunctionComponent = () => {
             src="/separator@2x.png"
           />
         </div>
-        <div className="self-stretch flex flex-row items-start justify-center py-5 px-0">
+        <div className="self-stretch flex flex-row ite  ms-start justify-center py-5 px-0">
           <ItemDetailsCard
-            itemDetailsCardItemImage="/itemdetailscarditemimageframe@2x.png"
-            itemDetailsCardItemName="A very big Mac"
-            itemDetailsCardItemPrice="$9.99"
+            itemDetailsCardItemImage={menuItem?.imageUrl}
+            itemDetailsCardItemName={menuItem?.name}
+            itemDetailsCardItemPrice={menuItem?.price.toString()}
+            itemDetailsCardItemDescription={menuItem?.description}
           />
         </div>
       </section>

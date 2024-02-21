@@ -33,7 +33,7 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/item-detail":
+      case "/item-detail/:itemId":
         title = "";
         metaDescription = "";
         break;
@@ -49,7 +49,7 @@ function App() {
 
     if (metaDescription) {
       const metaDescriptionTag: HTMLMetaElement | null = document.querySelector(
-        'head > meta[name="description"]',
+        'head > meta[name="description"]'
       );
       if (metaDescriptionTag) {
         metaDescriptionTag.content = metaDescription;
@@ -61,7 +61,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/homepage" element={<Homepage />} />
-      <Route path="/item-detail" element={<ItemDetail />} />
+      <Route path="/item-detail/:itemId" element={<ItemDetail />} />
       <Route path="/view-order" element={<ViewOrder />} />
     </Routes>
   );

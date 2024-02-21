@@ -6,12 +6,14 @@ import Button from "./Button";
 type ItemDetailsCardType = {
   itemDetailsCardItemImage?: string;
   itemDetailsCardItemName?: string;
+  itemDetailsCardItemDescription?: string;
   itemDetailsCardItemPrice?: string;
 };
 
 const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
   itemDetailsCardItemImage,
   itemDetailsCardItemName,
+  itemDetailsCardItemDescription,
   itemDetailsCardItemPrice,
 }) => {
   const navigate = useNavigate();
@@ -39,10 +41,7 @@ const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
           </div>
           <div className="w-[539px] flex flex-row items-start justify-start text-base sm:w-auto sm:[align-self:unset]">
             <div className="flex-1 relative sm:flex">
-              The Big Mac is a 100% beef burger with a taste like no other. The
-              mouthwatering perfection starts with two 100% pure all beef
-              patties and Big Mac sauce sandwiched between a sesame seed bun.
-              It’s topped off with pickles.
+              {itemDetailsCardItemDescription}
             </div>
           </div>
         </div>
