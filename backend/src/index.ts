@@ -4,7 +4,7 @@ import "dotenv/config";
 import mongoose from 'mongoose';
 import path from "path";
 import menuRoutes from '../src/routes/menu'
-
+import orderRoutes from '../src/routes/order'
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string, {
     dbName: "dev",
 });
@@ -30,6 +30,7 @@ app.use(
 );
 
 app.use("/api/menu", menuRoutes)
+app.use("/api/order", orderRoutes)
 
 
 /** Base URL API: https://localhost:3000 */

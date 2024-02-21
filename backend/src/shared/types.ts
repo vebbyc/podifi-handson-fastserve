@@ -72,8 +72,7 @@ export const orderSchema = new mongoose.Schema<OrderDTO>({
 
 //TODO: Order Item Related Models
 
-
-export type OrderItemDTO = {
+export class OrderItemDTO {
     menuItemId: string;
     menuItemName: string
     menuItemDescription: string
@@ -81,11 +80,21 @@ export type OrderItemDTO = {
     menuItemImageUrl: string;
     quantity: number;
     itemTotal: number;
+
+    constructor(orderItem: OrderItemType) {
+        this.menuItemId = orderItem.menuItemId._id;
+        this.menuItemName = orderItem.menuItemId.name;
+        this.menuItemDescription = orderItem.menuItemId.description;
+        this.menuItemPrice = orderItem.menuItemId.price;
+        this.menuItemImageUrl = orderItem.menuItemId.imageUrl;
+        this.quantity = orderItem.quantity;
+        this.itemTotal = orderItem.quantity * orderItem.menuItemId.price
+    }
 }
 
 export const orderItemSchema = new mongoose.Schema<OrderItemType>({
     _id: { type: String, required: true },
-    menuItemId: { type: String, required: true },
+    menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem' },
     quantity: { type: Number, required: true }
 })
 
