@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", MenuController.getOrder)
 router.post("/addToOrder", MenuController.addToOrder)
+router.put("/modifyQuantity", MenuController.updateOrder)
 
 export default router;
 

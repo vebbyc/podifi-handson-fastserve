@@ -6,7 +6,7 @@ import path from "path";
 import menuRoutes from '../src/routes/menu'
 import orderRoutes from '../src/routes/order'
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string, {
-    dbName: "dev",
+    // dbName: "dev",
 });
 // Define a middleware to log queries
 mongoose.set('debug', function (collectionName, method, query, doc, options) {

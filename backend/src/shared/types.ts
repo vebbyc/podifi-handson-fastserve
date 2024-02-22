@@ -67,7 +67,7 @@ export type OrderDTO = {
 
 export const orderSchema = new mongoose.Schema<OrderDTO>({
     totalOrderPrice: { type: Number, required: true },
-    orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "OrderItem" }],
+    orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "OrderItems" }],
 })
 
 //TODO: Order Item Related Models
@@ -93,7 +93,7 @@ export class OrderItemDTO {
 }
 
 export const orderItemSchema = new mongoose.Schema<OrderItemType>({
-    _id: { type: String, required: true },
+    // _id: { type: mongoose.Schema.Types.ObjectId, required: true },
     menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem' },
     quantity: { type: Number, required: true }
 })

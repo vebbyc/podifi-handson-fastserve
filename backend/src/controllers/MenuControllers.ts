@@ -4,6 +4,7 @@ import Menu, { MenuType, MenuItem, MenuItemType } from "../models/menu";
 import { MenuDTO, MenuItemDTO, OrderDTO, OrderItemDTO } from "../shared/types";
 import { OrderItem, OrderItemType } from "../models/order";
 import { Document } from "mongoose";
+import { ObjectId } from "mongodb";
 
 export class MenuController {
   static async getOrderItem(
@@ -20,7 +21,7 @@ export class MenuController {
         throw new Error("Invalid menuItemId");
       }
 
-      // Query the database for the order item
+      // Query thek database for the order item
       const orderItem = await OrderItem.findOne({ menuItemId: menuItemId });
 
       // Check if orderItem exists
@@ -59,13 +60,7 @@ export class MenuController {
       if (!orderItem) {
         throw new Error("OrderItem not found");
       }
-
-      // Update the quantity of the OrderItem
-      orderItem.quantity = newQuantity;
-
-      // Save the updated OrderItem to the database
-      const updatedOrderItem: OrderItemType = await orderItem.save();
-
+      const updatedOrderItem = await orderItem.save();
       // Return the updated OrderItem
       return new OrderItemDTO(updatedOrderItem);
     } catch (error) {
@@ -172,31 +167,33 @@ export class MenuController {
     }
   }
 
+  //To modify quantity order
+  static async updateOrder(req: Request, res: Response): Promise<Response> {
+    try {
+      const { menuItemId, quantity } = req.body;
 
+      // Check for valid inputs
+      if (!menuItemId || typeof quantity !== 'number' || quantity <= 0) {
+        return res.status(400).json({ error: "Invalid input parameters" });
+      }
 
-  // static async getOrderItems(req: Request, res: Response) {
-  //   try {
-  //     const menuItemId: string = req.params.menuItemId;
+      // Update order item in the database
+      console.log(`>>> updateOrder (menuItemId:${menuItemId}, quantity:${quantity}) executing...`);
 
-  //     // Validate menuItemId
-  //     if (!menuItemId || menuItemId === "") {
-  //       return res.status(400).json({ message: "Invalid menuItemId" });
-  //     }
+      await MenuController.updateOrderItem(menuItemId, quantity);
 
-  //     // Query the database for the order item
-  //     const orderItems = await OrderItem.find().populate("menuItems");
+      // Fetch updated order details
+      const updatedOrder: OrderDTO = await MenuController.getOrder(req, res);
 
-  //     // If orderItem is found, return it
-  //     if (!orderItems) {
-  //       return res.status(404).json({ message: "Order item not found" });
-  //     }
-  //     return res.status(200).json(orderItems);
-  //   } catch (error) {
-  //     // Handle database exceptions or connectivity issues
-  //     console.error("Error retrieving order item:", error);
-  //     return res.status(500).json({ message: "Internal server error" });
-  //   }
-  // }
+      // Return the updated order
+      return res.status(200).json(updatedOrder);
+    } catch (error) {
+      console.error("Error updating order:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+  }
+
 
   static async getActiveMenu(req: Request, res: Response) {
     try {
