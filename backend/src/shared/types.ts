@@ -82,6 +82,7 @@ export class OrderItemDTO {
     itemTotal: number;
 
     constructor(orderItem: OrderItemType) {
+
         this.menuItemId = orderItem.menuItemId._id;
         this.menuItemName = orderItem.menuItemId.name;
         this.menuItemDescription = orderItem.menuItemId.description;
@@ -93,7 +94,6 @@ export class OrderItemDTO {
 }
 
 export const orderItemSchema = new mongoose.Schema<OrderItemType>({
-    // _id: { type: mongoose.Schema.Types.ObjectId, required: true },
     menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem' },
     quantity: { type: Number, required: true }
 })

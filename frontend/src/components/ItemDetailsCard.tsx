@@ -1,13 +1,17 @@
-import { FunctionComponent, useCallback } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import { Input } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
-
+import { useQuery } from "react-query";
+import * as apiClient from "../api-client";
 type ItemDetailsCardType = {
   itemDetailsCardItemImage?: string;
   itemDetailsCardItemName?: string;
   itemDetailsCardItemDescription?: string;
   itemDetailsCardItemPrice?: string;
+
+  /**Action props */
+  onAddToOrder?: (quantity: number) => void;
 };
 
 const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
@@ -15,12 +19,27 @@ const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
   itemDetailsCardItemName,
   itemDetailsCardItemDescription,
   itemDetailsCardItemPrice,
+  onAddToOrder,
 }) => {
   const navigate = useNavigate();
 
+  const [quantity, setQuantity] = useState<number>(1);
+
+  // const {} = useQuery("", apiClient.);
+
   const onButtonContainerClick = useCallback(() => {
+    onAddToOrder ? onAddToOrder(quantity) : {};
     navigate("/homepage");
-  }, [navigate]);
+  }, [navigate, quantity, onAddToOrder]);
+
+  const onIncrementButtonContainerClick = useCallback(() => {
+    setQuantity(quantity + 1);
+  }, [quantity]);
+
+  const onDecrementButtonContainerClick = useCallback(() => {
+    const decrementQuantity = quantity > 1 ? quantity - 1 : quantity;
+    setQuantity(decrementQuantity);
+  }, [quantity]);
 
   return (
     <div className="bg-white flex flex-row items-start justify-start gap-[41px] text-left text-3xl text-gray-300 font-aleo sm:flex-col sm:gap-[41px] sm:items-center sm:justify-start">
@@ -48,19 +67,33 @@ const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
         <div className="self-stretch flex flex-row items-center justify-end gap-[50px] sm:flex-col sm:gap-[20px] sm:items-end sm:justify-start">
           <div className="flex flex-row items-center justify-start gap-[10px]">
             <img
-              className="relative rounded-10xs w-[23px] h-[23px] object-cover"
+              className={`relative rounded-10xs w-[23px] h-[23px] object-cover ${
+                quantity > 1 ? "opacity-100" : "opacity-10"
+              }`}
               alt=""
-              src="/itemdetailscardincrementquantityframe@2x.png"
+              src="/itemdetailscarddecrementquantityframe@2x.png"
+              onClick={onDecrementButtonContainerClick}
             />
             <Input
               className="bg-[transparent] font-aleo font-bold text-base text-gray-100"
               placeholder="1"
+              value={quantity > 0 ? quantity : ""}
+              type="number"
               size="sm"
+              onChange={(e) => {
+                const text = e.target.value;
+                if (text === "") {
+                  return;
+                }
+                const value = Number(text);
+                setQuantity(value > 1 ? value : 1);
+              }}
             />
             <img
               className="relative rounded-10xs w-[23px] h-[23px] object-cover"
               alt=""
-              src="/itemdetailscarddecrementquantityframe@2x.png"
+              src="/itemdetailscardincrementquantityframe@2x.png"
+              onClick={onIncrementButtonContainerClick}
             />
           </div>
           <Button

@@ -77,21 +77,31 @@ const displayNotification = (
           // onDismiss={() => completion()}
         />
       );
-      // }
-      break;
     case "Order Placed":
-      console.log("Order placed. Thank you!");
-      break;
+      return (
+        <NotificationMsg
+          notificationBackgroundColor="#C3F2CB"
+          notificationIconFrame="/notificationiconsuccess.png"
+          notificationMainMessage="Order placed successfully!"
+          // onDismiss={() => completion()}
+        />
+      );
     case "No Menu":
       return (
         <NotificationMsg
           notificationBackgroundColor="#FFEEAA"
           notificationIconFrame="/notificationiconframe@2x.png"
           notificationMainMessage="No available menu at this moment"
-          // onDismiss={() => completion()}
         />
       );
-      break;
+    case "error":
+      return (
+        <NotificationMsg
+          notificationBackgroundColor="#FFEEAA"
+          notificationIconFrame="/notificationiconframe@2x.png"
+          notificationMainMessage={notification.notificationData.join(", ")}
+        />
+      );
     default:
       console.error("Invalid notification type.");
       break;

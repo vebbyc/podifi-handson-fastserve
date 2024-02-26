@@ -2,6 +2,9 @@ import { MenuDTO, MenuItemDTO } from "../../backend/src/shared/types";
 
 const API_BASE_URL = "http://localhost:3000/api";
 
+
+
+//MARK: Menu
 export const getActiveMenu = async (): Promise<MenuDTO> => {
   try {
     const response = await fetch(`${API_BASE_URL}/menu/`, {

@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ItemDetailsCard from "../components/ItemDetailsCard";
 
@@ -50,6 +50,7 @@ const ItemDetail: FunctionComponent = () => {
             itemDetailsCardItemName={menuItem?.name}
             itemDetailsCardItemPrice={menuItem?.price.toString()}
             itemDetailsCardItemDescription={menuItem?.description}
+            // onAddToOrder={(quantity) => console.log(quantity)}
           />
         </div>
       </section>

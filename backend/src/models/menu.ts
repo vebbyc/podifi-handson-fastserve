@@ -15,19 +15,6 @@ export class MenuType {
         this.endTime = endTime;
         this.menuItems = menuItems;
     }
-
-    // getMenuType(): MealType {
-    //     const hour = parseInt(this.startTime.split(":")[0]);
-    //     if (hour >= 8 && hour < 12) {
-    //         return "breakfast";
-    //     } else if (hour >= 12 && hour < 17) {
-    //         return "lunch";
-    //     } else if (hour >= 17 && hour < 22) {
-    //         return "dinner";
-    //     } else {
-    //         return undefined; // Outside the defined meal times
-    //     }
-    // }
 }
 
 export type MenuItemType = {

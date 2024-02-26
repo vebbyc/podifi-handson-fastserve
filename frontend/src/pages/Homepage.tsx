@@ -11,7 +11,11 @@ import { useNotification } from "../contexts/NotificationContext";
 
 const Homepage: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { showNotification } = useNotification();
+  const { showNotification, hideNotification } = useNotification();
+
+  useEffect(() => {
+    hideNotification();
+  }, []);
 
   const onButtonContainerClick = useCallback(() => {
     navigate("/view-order");
@@ -25,8 +29,8 @@ const Homepage: FunctionComponent = () => {
   );
 
   const onRefreshButtonFrameIconClick = useCallback(() => {
-    // Please sync "Homepage" to the project
-  }, []);
+    window.location.reload();
+  }, [window]);
 
   const {
     data: menu,

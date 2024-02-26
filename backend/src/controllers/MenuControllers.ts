@@ -22,7 +22,7 @@ export class MenuController {
       }
 
       // Query thek database for the order item
-      const orderItem = await OrderItem.findOne({ menuItemId: menuItemId });
+      const orderItem = await OrderItem.findOne({ menuItemId: menuItemId }).populate("menuItemId");
 
       // Check if orderItem exists
       if (!orderItem) {
@@ -55,12 +55,16 @@ export class MenuController {
 
       // Retrieve the current OrderItem from the database
       const orderItem = await MenuController.getOrderItem(menuItemId);
+      console.log(">>>from updateOrderItem, orderItem:", orderItem);
+
 
       // Check if OrderItem exists
       if (!orderItem) {
         throw new Error("OrderItem not found");
       }
-      const updatedOrderItem = await orderItem.save();
+      orderItem.quantity = newQuantity
+      const updatedOrderItem = (await orderItem.save());
+      // const updatedOrderItem =
       // Return the updated OrderItem
       return new OrderItemDTO(updatedOrderItem);
     } catch (error) {
@@ -85,16 +89,15 @@ export class MenuController {
 
       // Save the new OrderItem to the database
       await newOrderItem.save();
-
       // Return the OrderItemDTO
-      return new OrderItemDTO(newOrderItem);
+      return new OrderItemDTO(await newOrderItem.populate("menuItemId"));
     } catch (error) {
       console.error("Error adding order item:", error);
       throw new Error("Error adding order item");
     }
   }
 
-  static async addToOrder(req: Request, res: Response): Promise<OrderItemDTO | null> {
+  static async addToOrder(req: Request, res: Response): Promise<Response> {
     try {
       // Extract menuItemId and quantity from the request body
       const { menuItemId, quantity } = req.body;
@@ -107,19 +110,20 @@ export class MenuController {
 
       // Check if the item exists in the order
       const existingOrderItem = await MenuController.getOrderItem(menuItemId);
+      console.log(">>existingOrderItem:", existingOrderItem);
 
       if (!existingOrderItem) {
         // If item doesn't exist, add it to the order
         const newOrderItem = await MenuController.addOrderItem(menuItemId, quantity);
-        res.status(201).json(newOrderItem);
-        return newOrderItem;
+        return res.status(201).json(newOrderItem);
       }
+      console.log(">>will update orderItem", existingOrderItem);
 
       // If item exists, update its quantity
       const newQuantity = existingOrderItem.quantity + quantity;
       const updatedOrderItem = await MenuController.updateOrderItem(menuItemId, newQuantity);
-      res.status(200).json(updatedOrderItem);
-      return updatedOrderItem;
+      console.log(">>updated orderItem", updatedOrderItem);
+      return res.status(200).json(updatedOrderItem);
 
     } catch (error) {
       console.error("Error adding to order:", error);
@@ -145,7 +149,7 @@ export class MenuController {
     }
   }
 
-  static async getOrder(_: Request, res: Response): Promise<OrderDTO> {
+  static async getOrder(_: Request, res: Response): Promise<Response> {
     try {
       // Retrieve order items
       const orderItemDTOs: OrderItemDTO[] = await MenuController.getOrderItems();
@@ -159,8 +163,7 @@ export class MenuController {
         totalOrderPrice,
         orderItems: orderItemDTOs
       };
-      res.status(200).json(orderDTO)
-      return orderDTO;
+      return res.status(200).json(orderDTO);
     } catch (error) {
       console.error("Error retrieving order:", error);
       throw new Error("Error retrieving order");
@@ -182,16 +185,61 @@ export class MenuController {
 
       await MenuController.updateOrderItem(menuItemId, quantity);
 
-      // Fetch updated order details
-      const updatedOrder: OrderDTO = await MenuController.getOrder(req, res);
-
       // Return the updated order
-      return res.status(200).json(updatedOrder);
+      return await MenuController.getOrder(req, res)
     } catch (error) {
       console.error("Error updating order:", error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
 
+  }
+
+  static async removeOrderItem(req: Request, res: Response): Promise<Response> {
+    try {
+      const menuItemId: string = req.body.menuItemId;
+
+      // Validate menuItemId
+      if (!menuItemId || typeof menuItemId !== "string" || menuItemId === "") {
+        throw new Error("Invalid menuItemId");
+      }
+
+      // Invoke Database service to delete the order item
+      const deletionResult = await OrderItem.deleteOne({ menuItemId: menuItemId })
+
+      // Check if the order item was successfully deleted
+      if (!deletionResult) {
+        throw new Error("Failed to delete order item");
+      }
+
+      // Return and  the updated order
+      return await MenuController.getOrder(req, res)
+    } catch (error) {
+      // Handle errors
+      console.error("Error removing order item:", error);
+      throw new Error("Error removing order item");
+    }
+  }
+
+  static async confirmOrder(_: Request, res: Response): Promise<void> {
+    try {
+      // Invoke Database service to delete all order items
+      const deletionResult = await OrderItem.deleteMany({})
+
+      // Check if all order items were successfully deleted
+      if (deletionResult.deletedCount < 1) {
+        res.status(404).send({ message: "You have no order items to delete" })
+        return
+      }
+
+      console.log(deletionResult);
+
+      // Return a success message to the client
+      res.status(200).send({ "message": "Order confirmed successfully" });
+    } catch (error) {
+      // Handle errors
+      console.error("Error confirming order:", error);
+      res.status(500).send("Error confirming order");
+    }
   }
 
 
