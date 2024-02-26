@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
+import { OrderItemDTO } from "../../../backend/src/shared/types";
+import { useNotification } from "../contexts/NotificationContext";
+
+const API_BASE_URL = "";
+
 type ItemDetailsCardType = {
+  itemDetailsId: string;
   itemDetailsCardItemImage?: string;
   itemDetailsCardItemName?: string;
   itemDetailsCardItemDescription?: string;
@@ -14,7 +20,27 @@ type ItemDetailsCardType = {
   onAddToOrder?: (quantity: number) => void;
 };
 
+// export const addToOrder = async (
+//   menuItemId: string,
+//   quantity: number
+// ): Promise<OrderItemDTO> => {
+//   const body = new URLSearchParams();
+//   body.append("menuItemId", menuItemId);
+//   body.append("quantity", quantity.toString());
+
+//   const response = await fetch(`${API_BASE_URL}/api/menus/order`, {
+//     method: "POST",
+//     body: body,
+//     credentials: "include",
+//   });
+//   if (!response.ok) {
+//     throw new Error(await getErrorMessageFromResponse(response));
+//   }
+//   return response.json();
+// };
+
 const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
+  itemDetailsId,
   itemDetailsCardItemImage,
   itemDetailsCardItemName,
   itemDetailsCardItemDescription,
@@ -23,11 +49,18 @@ const ItemDetailsCard: FunctionComponent<ItemDetailsCardType> = ({
 }) => {
   const navigate = useNavigate();
 
+  const { showNotification } = useNotification();
+
   const [quantity, setQuantity] = useState<number>(1);
 
-  // const {} = useQuery("", apiClient.);
-
   const onButtonContainerClick = useCallback(() => {
+    const orderItem = apiClient.addItemOrder({
+      menuItemId: itemDetailsId,
+      quantity,
+    });
+    console.log(orderItem);
+    showNotification({ type: "Item Added", notificationData: [] });
+
     onAddToOrder ? onAddToOrder(quantity) : {};
     navigate("/homepage");
   }, [navigate, quantity, onAddToOrder]);

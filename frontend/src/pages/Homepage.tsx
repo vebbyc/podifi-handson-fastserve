@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import NotificationMsg from "../components/NotificationMsg";
 import ItemCard from "../components/ItemCard";
+import Notification from "../components/Notification";
 import { useQuery } from "react-query";
 
 import * as apiClient from "../api-client";
@@ -12,10 +13,6 @@ import { useNotification } from "../contexts/NotificationContext";
 const Homepage: FunctionComponent = () => {
   const navigate = useNavigate();
   const { showNotification, hideNotification } = useNotification();
-
-  useEffect(() => {
-    hideNotification();
-  }, []);
 
   const onButtonContainerClick = useCallback(() => {
     navigate("/view-order");
@@ -79,6 +76,7 @@ const Homepage: FunctionComponent = () => {
             src="/separator@2x.png"
           />
         </div>
+        <Notification></Notification>
         {/* <NotificationMsg
           notificationIconFrame="/notificationiconsuccess.png"
           notificationMainMessage="Order successfully placed"

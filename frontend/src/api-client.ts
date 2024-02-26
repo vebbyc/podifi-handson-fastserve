@@ -1,7 +1,32 @@
-import { MenuDTO, MenuItemDTO } from "../../backend/src/shared/types";
+import { MenuDTO, MenuItemDTO, OrderItemDTO } from "../../backend/src/shared/types";
 
 const API_BASE_URL = "http://localhost:3000/api";
 
+type RequestOrderParam = {
+  menuItemId: string;
+  quantity: number;
+}
+
+//MARK: Order
+export const addItemOrder = async (request: RequestOrderParam): Promise<OrderItemDTO> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/order/`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    })
+    if (!response) {
+      throw new Error("No response from server")
+    }
+    return response.json()
+
+  } catch (error) {
+    throw new Error("Error adding item to order: ")
+  }
+}
 
 
 //MARK: Menu

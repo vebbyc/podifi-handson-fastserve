@@ -40,7 +40,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     <NotificationContext.Provider
       value={{ notification, showNotification, hideNotification }}
     >
-      {displayNotification(notification, hideNotification)}
       {children}
     </NotificationContext.Provider>
   );
@@ -56,56 +55,4 @@ export const useNotification = (): NotificationContext => {
   return context;
 };
 
-const displayNotification = (
-  notification: NotificationDTO | null | undefined,
-  completion: () => void
-) => {
-  if (!notification) {
-    console.log("No notification to display.");
-    return;
-  }
-
-  switch (notification.type) {
-    case "Item Added":
-      const message = notification.notificationData.join(" ");
-      // if (message) {
-      return (
-        <NotificationMsg
-          notificationBackgroundColor="#C3F2CB"
-          notificationIconFrame="/notificationiconsuccess.png"
-          notificationMainMessage="Item added to order!"
-          // onDismiss={() => completion()}
-        />
-      );
-    case "Order Placed":
-      return (
-        <NotificationMsg
-          notificationBackgroundColor="#C3F2CB"
-          notificationIconFrame="/notificationiconsuccess.png"
-          notificationMainMessage="Order placed successfully!"
-          // onDismiss={() => completion()}
-        />
-      );
-    case "No Menu":
-      return (
-        <NotificationMsg
-          notificationBackgroundColor="#FFEEAA"
-          notificationIconFrame="/notificationiconframe@2x.png"
-          notificationMainMessage="No available menu at this moment"
-        />
-      );
-    case "error":
-      return (
-        <NotificationMsg
-          notificationBackgroundColor="#FFEEAA"
-          notificationIconFrame="/notificationiconframe@2x.png"
-          notificationMainMessage={notification.notificationData.join(", ")}
-        />
-      );
-    default:
-      console.error("Invalid notification type.");
-      break;
-  }
-};
-
-export default Notification;
+// export default Notification;

@@ -46,11 +46,12 @@ const ItemDetail: FunctionComponent = () => {
         </div>
         <div className="self-stretch flex flex-row ite  ms-start justify-center py-5 px-0">
           <ItemDetailsCard
+            itemDetailsId={menuItem?.menuItemId ?? ""}
             itemDetailsCardItemImage={menuItem?.imageUrl}
             itemDetailsCardItemName={menuItem?.name}
             itemDetailsCardItemPrice={menuItem?.price.toString()}
             itemDetailsCardItemDescription={menuItem?.description}
-            // onAddToOrder={(quantity) => console.log(quantity)}
+            onAddToOrder={(quantity) => console.log(quantity)}
           />
         </div>
       </section>

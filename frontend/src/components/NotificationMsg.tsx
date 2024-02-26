@@ -5,6 +5,7 @@ import {
   useMemo,
   type CSSProperties,
 } from "react";
+import { useNotification } from "../contexts/NotificationContext";
 
 type NotificationMsgType = {
   notificationIconFrame?: string;
@@ -24,6 +25,7 @@ const NotificationMsg: FunctionComponent<NotificationMsgType> = ({
   notificationSecondaryMessFlex,
   // onDismiss,
 }) => {
+  const { hideNotification } = useNotification();
   const notificationStyle: CSSProperties = useMemo(() => {
     return {
       backgroundColor: notificationBackgroundColor,
@@ -56,6 +58,7 @@ const NotificationMsg: FunctionComponent<NotificationMsgType> = ({
 
   return (
     <section
+      onClick={hideNotification}
       className="self-stretch rounded-6xl bg-lightgoldenrodyellow flex flex-row items-center justify-start py-[25px] px-7 gap-[34px] text-left text-21xl text-gray-200 font-roboto border-[1px] border-solid border-lightgoldenrodyellow lg:flex-row lg:gap-[20px] lg:items-center lg:justify-start md:self-stretch md:w-auto md:flex-row md:gap-[5px] md:items-center md:justify-start md:pr-7 md:box-border"
       style={notificationStyle}
     >
