@@ -101,7 +101,7 @@ export const orderItemSchema = new mongoose.Schema<OrderItemType>({
 //TODO: Notification Related Models
 
 export type NotificationDTO = {
-    type: string
+    type: "error" | "No Menu" | "Order Placed" | "Item Added" | "Item Added" | undefined | null
     notificationData: string[]
 }
 

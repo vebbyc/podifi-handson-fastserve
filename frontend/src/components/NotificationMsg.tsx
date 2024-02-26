@@ -44,18 +44,6 @@ const NotificationMsg: FunctionComponent<NotificationMsgType> = ({
     };
   }, [notificationSecondaryMessFlex]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (onDismiss) {
-  //       onDismiss();
-  //     }
-  //   }, 2500);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [onDismiss]);
-
   return (
     <section
       onClick={hideNotification}
@@ -77,7 +65,7 @@ const NotificationMsg: FunctionComponent<NotificationMsgType> = ({
         className="flex-1 flex flex-row items-center justify-start text-13xl text-gray-300 font-work-sans md:flex-1 sm:gap-[10px]"
         style={notificationSecondaryMessageFrStyle}
       >
-        <div className="relative md:flex" />
+        <div className="relative md:flex">{notificationSecondaryMessFlex}</div>
       </div>
     </section>
   );

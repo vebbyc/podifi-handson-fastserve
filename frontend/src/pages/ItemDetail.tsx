@@ -4,10 +4,13 @@ import ItemDetailsCard from "../components/ItemDetailsCard";
 
 import * as apiClient from "../api-client";
 import { useQuery } from "react-query";
+import { OrderItemDTO } from "../../../backend/src/shared/types";
+import { useNotification } from "../contexts/NotificationContext";
 
 const ItemDetail: FunctionComponent = () => {
   const { itemId } = useParams();
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const onBackButtonFrameIconClick = useCallback(() => {
     navigate("/homepage");
@@ -22,6 +25,34 @@ const ItemDetail: FunctionComponent = () => {
     () => apiClient.getItemDetail(itemId),
     { enabled: !!itemId }
   );
+
+  const addToOrder = async (quantity: number): Promise<OrderItemDTO> => {
+    const body = new URLSearchParams();
+    body.append("menuItemId", itemId);
+    body.append("quantity", quantity.toString());
+
+    const response = await apiClient.addItemOrder({
+      menuItemId: itemId,
+      quantity: quantity,
+    });
+    if (!response) {
+      showNotification({
+        type: "error",
+        notificationData: [],
+      });
+    }
+
+    console.log(">>API POST SUCCESS", response);
+
+    showNotification({
+      type: "Item Added",
+      notificationData: [
+        `${quantity}x ${quantity} ${response.menuItemName}`,
+        `$${response.menuItemPrice * quantity}`,
+      ],
+    });
+    return response;
+  };
 
   return (
     <div className="relative bg-white w-full h-[1024px] overflow-hidden flex flex-col items-start justify-start sm:flex-col">
@@ -51,7 +82,7 @@ const ItemDetail: FunctionComponent = () => {
             itemDetailsCardItemName={menuItem?.name}
             itemDetailsCardItemPrice={menuItem?.price.toString()}
             itemDetailsCardItemDescription={menuItem?.description}
-            onAddToOrder={(quantity) => console.log(quantity)}
+            onAddToOrder={(quantity) => addToOrder(quantity)}
           />
         </div>
       </section>

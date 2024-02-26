@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import { useNotification } from "../contexts/NotificationContext";
 import NotificationMsg from "./NotificationMsg";
 
-const NotificationPopUp: FunctionComponent = () => {
+const Notification: FunctionComponent = () => {
   const { notification } = useNotification();
   if (!notification) {
     console.log("No notification to display.");
@@ -18,6 +18,7 @@ const NotificationPopUp: FunctionComponent = () => {
           notificationBackgroundColor="#C3F2CB"
           notificationIconFrame="/notificationiconsuccess.png"
           notificationMainMessage="Item added to order!"
+          notificationSecondaryMessFlex={message}
           // onDismiss={() => completion()}
         />
       );
@@ -53,4 +54,4 @@ const NotificationPopUp: FunctionComponent = () => {
   }
 };
 
-export default NotificationPopUp;
+export default Notification;

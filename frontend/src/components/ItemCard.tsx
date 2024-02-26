@@ -16,7 +16,6 @@ type ItemCardType = {
   itemCardItemImageIconWidth?: CSSProperties["width"];
   itemCardItemImageIconAlignSelf?: CSSProperties["alignSelf"];
   itemCardItemImageIconOverflow?: CSSProperties["overflow"];
-
   /** Action props */
   onItemCardContainerClick?: () => void;
 };
